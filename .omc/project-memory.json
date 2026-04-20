@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1776589049587,
+  "lastScanned": 1776682134379,
   "projectRoot": "/Users/yeonghyeonko/Development/git/langflow-guide",
   "techStack": {
     "languages": [],
@@ -24,19 +24,29 @@
   "structure": {
     "isMonorepo": false,
     "workspaces": [],
-    "mainDirectories": [],
+    "mainDirectories": [
+      "assets"
+    ],
     "gitBranches": {
       "defaultBranch": "main",
       "branchingStrategy": null
     }
   },
   "customNotes": [],
-  "directoryMap": {},
+  "directoryMap": {
+    "assets": {
+      "path": "assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1776682134346,
+      "keyFiles": []
+    }
+  },
   "hotPaths": [
     {
       "path": "index.html",
-      "accessCount": 189,
-      "lastAccessed": 1776676700317,
+      "accessCount": 267,
+      "lastAccessed": 1776694023946,
       "type": "file"
     },
     {
@@ -47,8 +57,8 @@
     },
     {
       "path": "",
-      "accessCount": 13,
-      "lastAccessed": 1776646200514,
+      "accessCount": 14,
+      "lastAccessed": 1776682365140,
       "type": "directory"
     },
     {

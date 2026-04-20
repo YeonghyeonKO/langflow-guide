@@ -1,7 +1,7 @@
 {
   "tool_name": "Read",
   "tool_input_preview": "{\"file_path\":\"/Users/yeonghyeonko/Development/git/langflow-guide/index.html\"}",
-  "error": "File content (71023 tokens) exceeds maximum allowed tokens (25000). Use offset and limit parameters to read specific portions of the file, or search for specific content instead of reading the whole file.",
-  "timestamp": "2026-04-20T09:13:44.363Z",
+  "error": "File content (75233 tokens) exceeds maximum allowed tokens (25000). Use offset and limit parameters to read specific portions of the file, or search for specific content instead of reading the whole file.",
+  "timestamp": "2026-04-20T10:52:03.736Z",
   "retry_count": 1
 }

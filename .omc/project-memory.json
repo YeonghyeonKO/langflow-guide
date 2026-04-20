@@ -35,8 +35,8 @@
   "hotPaths": [
     {
       "path": "index.html",
-      "accessCount": 72,
-      "lastAccessed": 1776648522481,
+      "accessCount": 165,
+      "lastAccessed": 1776675751777,
       "type": "file"
     },
     {
@@ -53,8 +53,8 @@
     },
     {
       "path": "README.md",
-      "accessCount": 4,
-      "lastAccessed": 1776643620434,
+      "accessCount": 5,
+      "lastAccessed": 1776659141114,
       "type": "file"
     }
   ],

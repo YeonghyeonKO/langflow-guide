@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1776589049587,
+  "projectRoot": "/Users/yeonghyeonko/Development/git/langflow-guide",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {},
+  "hotPaths": [
+    {
+      "path": "index.html",
+      "accessCount": 67,
+      "lastAccessed": 1776646733210,
+      "type": "file"
+    },
+    {
+      "path": "langflow-guide.md",
+      "accessCount": 16,
+      "lastAccessed": 1776646233609,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 13,
+      "lastAccessed": 1776646200514,
+      "type": "directory"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 4,
+      "lastAccessed": 1776643620434,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

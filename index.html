@@ -131,15 +131,14 @@
         <li><a href="#section-2"><span class="toc-section-num">02</span> <span data-lang="ko">왜 Langflow인가</span><span data-lang="en">Why Langflow</span><span data-lang="zh">为何选择 Langflow</span><span data-lang="ja">なぜ Langflow か</span></a></li>
         <li><a href="#section-3"><span class="toc-section-num">03</span> <span data-lang="ko">Component 소개</span><span data-lang="en">Components</span><span data-lang="zh">组件介绍</span><span data-lang="ja">コンポーネント紹介</span></a></li>
         <li><a href="#section-4"><span class="toc-section-num">04</span> <span data-lang="ko">Custom Component</span><span data-lang="en">Custom Component</span><span data-lang="zh">自定义组件</span><span data-lang="ja">カスタムコンポーネント</span></a></li>
-        <li><a href="#section-5"><span class="toc-section-num">05</span> <span data-lang="ko">pip install</span><span data-lang="en">pip install</span><span data-lang="zh">pip install</span><span data-lang="ja">pip install</span></a></li>
-        <li><a href="#section-6"><span class="toc-section-num">06</span> <span data-lang="ko">pip list 확인</span><span data-lang="en">pip list</span><span data-lang="zh">pip list 查看</span><span data-lang="ja">pip list 確認</span></a></li>
-        <li><a href="#section-7"><span class="toc-section-num">07</span> <span data-lang="ko">Flow 사용법</span><span data-lang="en">Using Flows</span><span data-lang="zh">Flow 使用方法</span><span data-lang="ja">Flow の使い方</span></a></li>
-        <li><a href="#section-8"><span class="toc-section-num">08</span> <span data-lang="ko">Agent (Tool Mode)</span><span data-lang="en">Agent (Tool Mode)</span><span data-lang="zh">Agent（工具模式）</span><span data-lang="ja">Agent（ツールモード）</span></a></li>
-        <li><a href="#section-9"><span class="toc-section-num">09</span> <span data-lang="ko">API Access</span><span data-lang="en">API Access</span><span data-lang="zh">API 访问</span><span data-lang="ja">API アクセス</span></a></li>
-        <li><a href="#section-10"><span class="toc-section-num">10</span> <span data-lang="ko">RAG Pipeline</span><span data-lang="en">RAG Pipeline</span><span data-lang="zh">RAG 管道</span><span data-lang="ja">RAG パイプライン</span></a></li>
-        <li><a href="#section-11"><span class="toc-section-num">11</span> <span data-lang="ko">실전 Tips</span><span data-lang="en">Pro Tips</span><span data-lang="zh">实战技巧</span><span data-lang="ja">実践 Tips</span></a></li>
-        <li><a href="#section-12"><span class="toc-section-num">12</span> <span data-lang="ko">Langflow 1.9 신기능</span><span data-lang="en">Langflow 1.9 Features</span><span data-lang="zh">Langflow 1.9 新功能</span><span data-lang="ja">Langflow 1.9 新機能</span></a></li>
-        <li><a href="#section-13"><span class="toc-section-num">13</span> <span data-lang="ko">Evaluation Harness</span><span data-lang="en">Evaluation Harness</span><span data-lang="zh">评估框架</span><span data-lang="ja">評価ハーネス</span></a></li>
+        <li><a href="#section-5"><span class="toc-section-num">05</span> <span data-lang="ko">pip install & list</span><span data-lang="en">pip install & list</span><span data-lang="zh">pip install & list</span><span data-lang="ja">pip install & list</span></a></li>
+        <li><a href="#section-6"><span class="toc-section-num">06</span> <span data-lang="ko">Flow 사용법</span><span data-lang="en">Using Flows</span><span data-lang="zh">Flow 使用方法</span><span data-lang="ja">Flow の使い方</span></a></li>
+        <li><a href="#section-7"><span class="toc-section-num">07</span> <span data-lang="ko">Agent (Tool Mode)</span><span data-lang="en">Agent (Tool Mode)</span><span data-lang="zh">Agent（工具模式）</span><span data-lang="ja">Agent（ツールモード）</span></a></li>
+        <li><a href="#section-8"><span class="toc-section-num">08</span> <span data-lang="ko">API Access</span><span data-lang="en">API Access</span><span data-lang="zh">API 访问</span><span data-lang="ja">API アクセス</span></a></li>
+        <li><a href="#section-9"><span class="toc-section-num">09</span> <span data-lang="ko">RAG Pipeline</span><span data-lang="en">RAG Pipeline</span><span data-lang="zh">RAG 管道</span><span data-lang="ja">RAG パイプライン</span></a></li>
+        <li><a href="#section-10"><span class="toc-section-num">10</span> <span data-lang="ko">실전 Tips</span><span data-lang="en">Pro Tips</span><span data-lang="zh">实战技巧</span><span data-lang="ja">実践 Tips</span></a></li>
+        <li><a href="#section-11"><span class="toc-section-num">11</span> <span data-lang="ko">Langflow 1.9 신기능</span><span data-lang="en">Langflow 1.9 Features</span><span data-lang="zh">Langflow 1.9 新功能</span><span data-lang="ja">Langflow 1.9 新機能</span></a></li>
+        <li><a href="#section-12"><span class="toc-section-num">12</span> <span data-lang="ko">하네스 엔지니어링</span><span data-lang="en">Harness Engineering</span><span data-lang="zh">哈尼斯工程</span><span data-lang="ja">ハーネスエンジニアリング</span></a></li>
     </ul>
     <div class="sidebar-footer">
         <strong data-lang="ko">고영현</strong><strong data-lang="en">Younghyeon Ko</strong><strong data-lang="zh">高英现</strong><strong data-lang="ja">コ・ヨンヒョン</strong><br>
@@ -927,13 +926,11 @@ class PipInstaller(Component):
 <div data-lang="zh">
     <div class="callout callout-warning"><p class="callout-title">务必开启 Freeze</p><p>运行 pip install 组件后，务必开启 <strong>Freeze</strong>。当 Flow 在 Runtime 中运行时，每次都执行 pip install 会导致不必要的延迟和错误。Freeze 会缓存之前的结果，防止重复执行。</p></div>
 </div>
-</section>
 
-<!-- ==================== Section 6 ==================== -->
-<section class="section" id="section-6">
-<div data-lang="ko"><h2>6. 사용 가능한 pip list 확인법</h2><p>설치된 패키지 목록을 확인하는 컴포넌트입니다.</p></div>
-<div data-lang="en"><h2>6. Checking pip Packages</h2><p>Check installed packages in the Langflow environment.</p></div>
-<div data-lang="zh"><h2>6. 查看 pip 包列表</h2><p>查看 Langflow 环境中已安装的包。</p></div>
+<div data-lang="ko"><h3>설치된 패키지 목록 확인 (pip list)</h3></div>
+<div data-lang="en"><h3>Checking Installed Packages (pip list)</h3></div>
+<div data-lang="zh"><h3>查看已安装的包列表 (pip list)</h3></div>
+<div data-lang="ja"><h3>インストール済みパッケージ一覧確認 (pip list)</h3></div>
 <div class="code-label">Python - Pip List Checker</div>
 <pre><code class="language-python">import subprocess, sys
 from langflow.custom import Component
@@ -956,18 +953,18 @@ class PipListChecker(Component):
             packages = "\n".join(lines[:2] + filtered)
             self.status = f"'{self.filter_keyword}': {len(filtered)}개"
         return Data(data={"packages": packages})</code></pre>
-<div data-lang="ko"><h3>프로그래밍적 확인</h3></div><div data-lang="en"><h3>Programmatic Check</h3></div><div data-lang="zh"><h3>编程方式查看</h3></div>
+<div data-lang="ko"><h4>프로그래밍적 확인 (importlib)</h4></div><div data-lang="en"><h4>Programmatic Check (importlib)</h4></div><div data-lang="zh"><h4>编程方式查看 (importlib)</h4></div><div data-lang="ja"><h4>プログラム的な確認 (importlib)</h4></div>
 <div class="code-label">Python</div>
 <pre><code class="language-python">from importlib.metadata import distributions
 for dist in distributions():
     print(f"{dist.metadata['Name']} == {dist.version}")</code></pre>
 </section>
 
-<!-- ==================== Section 7 ==================== -->
-<section class="section" id="section-7">
-<div data-lang="ko"><h2>7. 간단한 Flow 사용법</h2><p>Flow는 컴포넌트를 연결하여 구성한 AI 파이프라인입니다.</p></div>
-<div data-lang="en"><h2>7. Basic Flow Usage</h2><p>A Flow is an AI pipeline built by connecting components.</p></div>
-<div data-lang="zh"><h2>7. 简单 Flow 使用方法</h2><p>Flow 是通过连接组件构建的 AI 管道。</p></div>
+<!-- ==================== Section 6 ==================== -->
+<section class="section" id="section-6">
+<div data-lang="ko"><h2>6. 간단한 Flow 사용법</h2><p>Flow는 컴포넌트를 연결하여 구성한 AI 파이프라인입니다.</p></div>
+<div data-lang="en"><h2>6. Basic Flow Usage</h2><p>A Flow is an AI pipeline built by connecting components.</p></div>
+<div data-lang="zh"><h2>6. 简单 Flow 使用方法</h2><p>Flow 是通过连接组件构建的 AI 管道。</p></div>
 <div class="diagram">
     <div class="diagram-flow">
         <div class="diagram-node">Chat Input</div><span class="diagram-arrow">&rarr;</span>
@@ -1002,11 +999,11 @@ for dist in distributions():
 </div>
 </section>
 
-<!-- ==================== Section 8 ==================== -->
-<section class="section" id="section-8">
-<div data-lang="ko"><h2>8. Agent 만들기 (Tool Mode)</h2><p>Agent는 LLM이 도구를 자율적으로 선택하고 호출하여 작업을 수행합니다.</p></div>
-<div data-lang="en"><h2>8. Building Agents (Tool Mode)</h2><p>The Agent autonomously selects and invokes tools to accomplish tasks.</p></div>
-<div data-lang="zh"><h2>8. 创建 Agent（工具模式）</h2><p>Agent 自主选择和调用工具执行任务。</p></div>
+<!-- ==================== Section 7 ==================== -->
+<section class="section" id="section-7">
+<div data-lang="ko"><h2>7. Agent 만들기 (Tool Mode)</h2><p>Agent는 LLM이 도구를 자율적으로 선택하고 호출하여 작업을 수행합니다.</p></div>
+<div data-lang="en"><h2>7. Building Agents (Tool Mode)</h2><p>The Agent autonomously selects and invokes tools to accomplish tasks.</p></div>
+<div data-lang="zh"><h2>7. 创建 Agent（工具模式）</h2><p>Agent 自主选择和调用工具执行任务。</p></div>
 <div class="diagram">
     <div class="diagram-flow">
         <div class="diagram-node">Chat Input</div><span class="diagram-arrow">&rarr;</span>
@@ -1058,11 +1055,11 @@ for dist in distributions():
 </div>
 </section>
 
-<!-- ==================== Section 9 ==================== -->
-<section class="section" id="section-9">
-<div data-lang="ko"><h2>9. API Access (OpenAI 호환)</h2><p>Flow를 <strong>OpenAI 호환 API</strong>로 외부에 노출합니다. <strong>Share &gt; API Access</strong>에서 확인하세요.</p></div>
-<div data-lang="en"><h2>9. API Access (OpenAI Compatible)</h2><p>Expose your Flow as an <strong>OpenAI-compatible API</strong>. Check <strong>Share &gt; API Access</strong>.</p></div>
-<div data-lang="zh"><h2>9. API 访问（OpenAI 兼容）</h2><p>将 Flow 作为 <strong>OpenAI 兼容 API</strong> 对外暴露。在 <strong>Share &gt; API Access</strong> 中查看。</p></div>
+<!-- ==================== Section 8 ==================== -->
+<section class="section" id="section-8">
+<div data-lang="ko"><h2>8. API Access (OpenAI 호환)</h2><p>Flow를 <strong>OpenAI 호환 API</strong>로 외부에 노출합니다. <strong>Share &gt; API Access</strong>에서 확인하세요.</p></div>
+<div data-lang="en"><h2>8. API Access (OpenAI Compatible)</h2><p>Expose your Flow as an <strong>OpenAI-compatible API</strong>. Check <strong>Share &gt; API Access</strong>.</p></div>
+<div data-lang="zh"><h2>8. API 访问（OpenAI 兼容）</h2><p>将 Flow 作为 <strong>OpenAI 兼容 API</strong> 对外暴露。在 <strong>Share &gt; API Access</strong> 中查看。</p></div>
 <div class="card"><table style="width:100%;border:none">
     <tr><td style="padding:6px 0;border:none;width:100px"><strong>Endpoint</strong></td><td style="padding:6px 0;border:none"><code>POST {LANGFLOW_URL}/api/v1/responses</code></td></tr>
     <tr><td style="padding:6px 0;border:none"><strong>Auth</strong></td><td style="padding:6px 0;border:none"><code>x-api-key</code> header</td></tr>
@@ -1101,10 +1098,10 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
 <div data-lang="zh"><div class="callout callout-tip"><p class="callout-title">提示</p><p>可从任何应用像调用标准 LLM API 一样调用 Langflow Flow。只需更改 OpenAI SDK 中的 <code>base_url</code>。</p></div></div>
 </section>
 
-<!-- ==================== Section 10: RAG ==================== -->
-<section class="section" id="section-10">
+<!-- ==================== Section 9: RAG ==================== -->
+<section class="section" id="section-9">
 <div data-lang="ko">
-    <h2>10. RAG Pipeline 구축하기</h2>
+    <h2>9. RAG Pipeline 구축하기</h2>
     <p><strong>RAG(Retrieval-Augmented Generation)</strong>는 LLM이 외부 문서를 검색(Retrieval)한 후 그 내용을 바탕으로 답변을 생성(Generation)하는 패턴입니다. 폐쇄망 내 사내 문서를 LLM이 참고하도록 만들 수 있어 실무에서 가장 많이 사용됩니다.</p>
     <h3>RAG가 필요한 이유</h3>
     <ul>
@@ -1115,7 +1112,7 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
     <h3>RAG Flow 구조</h3>
 </div>
 <div data-lang="en">
-    <h2>10. Building a RAG Pipeline</h2>
+    <h2>9. Building a RAG Pipeline</h2>
     <p><strong>RAG (Retrieval-Augmented Generation)</strong> is a pattern where the LLM retrieves external documents first, then generates answers based on that content. Essential for making LLMs reference internal documents in air-gapped environments.</p>
     <h3>Why RAG?</h3>
     <ul>
@@ -1126,7 +1123,7 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
     <h3>RAG Flow Structure</h3>
 </div>
 <div data-lang="zh">
-    <h2>10. 构建 RAG 管道</h2>
+    <h2>9. 构建 RAG 管道</h2>
     <p><strong>RAG（检索增强生成）</strong>是 LLM 先检索外部文档，再基于内容生成回答的模式。在封闭网络中让 LLM 参考内部文档的必备方案。</p>
     <h3>为什么需要 RAG？</h3>
     <ul>
@@ -1212,10 +1209,10 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
 </div>
 </section>
 
-<!-- ==================== Section 11: Tips ==================== -->
-<section class="section" id="section-11">
+<!-- ==================== Section 10: Tips ==================== -->
+<section class="section" id="section-10">
 <div data-lang="ko">
-    <h2>11. 실전 Tips & 트러블슈팅</h2>
+    <h2>10. 실전 Tips & 트러블슈팅</h2>
     <h3>Flow 설계 Best Practices</h3>
     <ul>
         <li><strong>작게 시작:</strong> 복잡한 Flow를 한 번에 만들지 말고, 2~3개 컴포넌트로 기본 동작을 확인한 후 점진적으로 확장하세요.</li>
@@ -1226,7 +1223,7 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
     <h3>자주 발생하는 문제</h3>
 </div>
 <div data-lang="en">
-    <h2>11. Pro Tips & Troubleshooting</h2>
+    <h2>10. Pro Tips & Troubleshooting</h2>
     <h3>Flow Design Best Practices</h3>
     <ul>
         <li><strong>Start small:</strong> Don't build complex Flows at once. Verify basic operation with 2-3 components, then expand.</li>
@@ -1237,7 +1234,7 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
     <h3>Common Issues</h3>
 </div>
 <div data-lang="zh">
-    <h2>11. 实战技巧与故障排除</h2>
+    <h2>10. 实战技巧与故障排除</h2>
     <h3>Flow 设计最佳实践</h3>
     <ul>
         <li><strong>从小开始：</strong>不要一次构建复杂 Flow。先用2-3个组件验证基本功能，再逐步扩展。</li>
@@ -1353,10 +1350,10 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
 <img src="assets/images/langflow-architecture.png" alt="Langflow Reference Architecture" class="step-img">
 </section>
 
-<!-- ==================== Section 12: Langflow 1.9 ==================== -->
-<section class="section" id="section-12">
+<!-- ==================== Section 11: Langflow 1.9 ==================== -->
+<section class="section" id="section-11">
 <div data-lang="ko">
-    <h2>12. Langflow 1.9 주요 신기능</h2>
+    <h2>11. Langflow 1.9 주요 신기능</h2>
     <p>2026년 초 출시된 Langflow 1.9는 AI 에이전트 개발 경험을 크게 향상시키는 기능들이 추가되었습니다.</p>
     <h3>Langflow Assistant (AI 코파일럿)</h3>
     <p>Langflow UI 안에 내장된 <strong>AI 어시스턴트</strong>입니다. 자연어로 "이런 컴포넌트가 필요해"라고 설명하면, Assistant가 Custom Component 코드를 자동 생성합니다.</p>
@@ -1380,7 +1377,7 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
     </ul>
 </div>
 <div data-lang="en">
-    <h2>12. Langflow 1.9 Key Features</h2>
+    <h2>11. Langflow 1.9 Key Features</h2>
     <p>Released early 2026, Langflow 1.9 brings major improvements to the AI agent development experience.</p>
     <h3>Langflow Assistant (AI Copilot)</h3>
     <p>A built-in <strong>AI assistant</strong> inside the Langflow UI. Describe what you need in natural language, and the Assistant auto-generates Custom Component code.</p>
@@ -1404,7 +1401,7 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
     </ul>
 </div>
 <div data-lang="zh">
-    <h2>12. Langflow 1.9 主要新功能</h2>
+    <h2>11. Langflow 1.9 主要新功能</h2>
     <p>2026年初发布的 Langflow 1.9 大幅提升了 AI Agent 开发体验。</p>
     <h3>Langflow Assistant（AI 助手）</h3>
     <p>内置于 Langflow UI 中的 <strong>AI 助手</strong>。用自然语言描述需求，Assistant 自动生成自定义组件代码。</p>
@@ -1424,7 +1421,7 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
     </ul>
 </div>
 <div data-lang="ja">
-    <h2>12. Langflow 1.9 主要新機能</h2>
+    <h2>11. Langflow 1.9 主要新機能</h2>
     <p>2026年初頭にリリースされたLangflow 1.9は、AIエージェント開発体験を大幅に向上させます。</p>
     <h3>Langflow Assistant（AIコパイロット）</h3>
     <p>Langflow UIに内蔵された<strong>AIアシスタント</strong>。自然言語で説明するだけで、カスタムコンポーネントのコードを自動生成します。</p>
@@ -1445,25 +1442,25 @@ r2 = client.responses.create(model="YOUR_FLOW_ID", input="방금 뭐라고 했�
 </div>
 </section>
 
-<!-- ==================== Section 13: Harness Engineering ==================== -->
-<section class="section" id="section-13">
+<!-- ==================== Section 12: Harness Engineering ==================== -->
+<section class="section" id="section-12">
 <div data-lang="ko">
-    <h2>13. 하네스 엔지니어링 (Harness Engineering)</h2>
+    <h2>12. 하네스 엔지니어링 (Harness Engineering)</h2>
     <p>"<strong>모델이 아니라 환경이 병목이다</strong>" — 하네스 엔지니어링은 AI 에이전트가 안정적으로 작업할 수 있도록 <strong>제약, 피드백, 운영 시스템을 설계하는 방법론</strong>입니다. 2026년 2월 HashiCorp과 OpenAI에 의해 공식화되었습니다.</p>
     <h3>프롬프트 &lt; 컨텍스트 &lt; 하네스</h3>
 </div>
 <div data-lang="en">
-    <h2>13. Harness Engineering</h2>
+    <h2>12. Harness Engineering</h2>
     <p>"<strong>The bottleneck is the environment, not the model</strong>" — Harness Engineering is the methodology of designing <strong>constraints, feedback loops, and operational systems</strong> so AI agents can work reliably. Formalized in Feb 2026 by HashiCorp and OpenAI.</p>
     <h3>Prompt &lt; Context &lt; Harness</h3>
 </div>
 <div data-lang="zh">
-    <h2>13. 哈尼斯工程（Harness Engineering）</h2>
+    <h2>12. 哈尼斯工程（Harness Engineering）</h2>
     <p>"<strong>瓶颈在于环境，而非模型</strong>" — 哈尼斯工程是设计<strong>约束、反馈循环和运营系统</strong>以使AI Agent可靠工作的方法论。2026年2月由HashiCorp和OpenAI正式提出。</p>
     <h3>Prompt &lt; Context &lt; Harness</h3>
 </div>
 <div data-lang="ja">
-    <h2>13. ハーネスエンジニアリング</h2>
+    <h2>12. ハーネスエンジニアリング</h2>
     <p>「<strong>ボトルネックはモデルではなく環境にある</strong>」 — ハーネスエンジニアリングは、AIエージェントが安定的に動作できるよう<strong>制約、フィードバック、運用システムを設計する方法論</strong>です。2026年2月にHashiCorpとOpenAIにより公式化されました。</p>
     <h3>Prompt &lt; Context &lt; Harness</h3>
 </div>
@@ -1596,7 +1593,18 @@ function toggleTheme(){const h=document.documentElement,n=h.getAttribute('data-t
 (function(){const t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);document.querySelector('.theme-icon').textContent=t==='dark'?'\u263E':'\u2600'})();
 
 // Language
-function setLang(l){document.documentElement.setAttribute('lang',l);localStorage.setItem('lang',l);document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===l.toUpperCase()))}
+function setLang(l){
+    document.documentElement.setAttribute('lang',l);localStorage.setItem('lang',l);
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===l.toUpperCase()));
+    // Clear previous fallback styles
+    document.querySelectorAll('[data-lang-fallback]').forEach(el=>{el.style.display='';el.removeAttribute('data-lang-fallback')});
+    // JA fallback: show EN content where JA is missing
+    if(l==='ja'){document.querySelectorAll('.section, .guide-header').forEach(sec=>{
+        if(!sec.querySelector('[data-lang="ja"]')){sec.querySelectorAll('[data-lang="en"]').forEach(el=>{
+            const t=el.tagName;el.style.display=t==='SPAN'?'inline':t==='TD'||t==='TH'?'table-cell':t==='LI'?'list-item':'block';
+            el.setAttribute('data-lang-fallback','1')})}
+    })}
+}
 (function(){setLang(localStorage.getItem('lang')||'ko')})();
 
 // Sidebar

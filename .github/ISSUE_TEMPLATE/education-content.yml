@@ -1,0 +1,60 @@
+name: "Education Content Request"
+description: "Request new materials or content to be added to the guide"
+labels: ["content-request", "education"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for new content or materials? Let us know what topics should be covered.
+  - type: dropdown
+    id: content-type
+    attributes:
+      label: Content Type
+      options:
+        - New Section / Chapter
+        - Existing Section Enhancement
+        - Code Example
+        - Use Case / Tutorial
+        - Architecture Diagram
+        - Best Practice
+        - FAQ
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: topic
+    attributes:
+      label: Topic
+      description: "What topic should be covered?"
+      placeholder: "e.g., Multi-Agent orchestration pattern"
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: Detail
+      description: "Describe what you'd like to see covered. Include any reference links if available."
+      placeholder: |
+        - What problem does this solve?
+        - Who would benefit from this content?
+        - Any reference materials or links?
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "High - needed for upcoming training"
+        - "Medium - would improve the guide"
+        - "Low - nice to have"
+    validations:
+      required: true
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Attachments
+      description: "Drag and drop any reference materials, screenshots, or documents"
+      placeholder: "Optional: paste or drag files here"
+    validations:
+      required: false

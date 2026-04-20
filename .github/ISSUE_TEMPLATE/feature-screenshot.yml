@@ -1,0 +1,48 @@
+name: "Feature Screenshot"
+description: "Share a screenshot of a Langflow feature to be documented"
+labels: ["screenshot", "feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing! Please upload a screenshot of a Langflow feature (Settings, Playground, API Access, etc.)
+  - type: dropdown
+    id: feature
+    attributes:
+      label: Feature Area
+      options:
+        - Settings (Global Variables)
+        - Settings (API Keys)
+        - Playground
+        - Share / API Access
+        - Flow Activity / Trace
+        - Knowledge
+        - Files
+        - Deployment
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: "Drag and drop your screenshot here"
+      placeholder: "Paste or drag image here"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: "What does this screenshot show? Where should it be placed in the guide?"
+      placeholder: "e.g., Global Variables settings page showing how to add a new variable"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Langflow Version
+      description: "Which Langflow version is shown?"
+      placeholder: "e.g., 1.9.0"
+    validations:
+      required: false

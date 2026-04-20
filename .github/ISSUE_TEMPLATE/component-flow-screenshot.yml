@@ -1,0 +1,56 @@
+name: "Component / Flow Screenshot"
+description: "Share a component or flow screenshot to be added to the guide"
+labels: ["screenshot", "component-flow"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing! Please upload a screenshot of a Langflow component or flow.
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options:
+        - Component Screenshot
+        - Flow Screenshot
+        - Playground Screenshot
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: Related Section
+      description: "Which guide section does this relate to? (e.g., Section 4 - Custom Component)"
+      placeholder: "Section number or title"
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: "Drag and drop your screenshot here"
+      placeholder: "Paste or drag image here"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: "Brief description of what the screenshot shows"
+      placeholder: "e.g., Custom Component with 3 outputs connected to Agent"
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      description: "Which language version is shown in the screenshot?"
+      options:
+        - Korean (KO)
+        - English (EN)
+        - Chinese (ZH)
+        - Japanese (JA)
+        - N/A
+    validations:
+      required: false

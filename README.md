@@ -24,7 +24,7 @@ AI Agent Builder로 시작하는 LLM 애플리케이션 개발 가이드
 
 ## 작성자
 
-**고영현 (Younghyeon Ko)**
+**고영현 / Ko Yeonghyeon / 高永賢**
 AI/Data Platform @ SK hynix
 
 - [LinkedIn](https://www.linkedin.com/in/yeonghyeon-marcel-ko)

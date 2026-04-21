@@ -389,7 +389,7 @@
     </div>
 </div>
 
-<!-- Token & KV-Cache -->
+<!-- Token, Tokenomics & KV-Cache -->
 <div data-lang="ko">
     <h3>Token: 반도체의 Memory처럼, AI의 기본 단위</h3>
     <p>반도체에서 <strong>Memory(메모리)</strong>가 데이터를 저장하는 기본 단위라면, LLM에서 <strong>Token</strong>은 언어를 처리하는 기본 단위입니다. 한 단어가 1~3개의 토큰으로 분해되며, 모든 비용과 성능이 토큰 수로 결정됩니다.</p>
@@ -398,13 +398,24 @@
         <li><strong>속도:</strong> 토큰이 많을수록 처리 시간 증가</li>
         <li><strong>Context Window:</strong> 모델이 한 번에 처리할 수 있는 최대 토큰 수 (예: 128K, 200K, 1M)</li>
     </ul>
-    <h4>KV-Cache란?</h4>
-    <p>CPU에 L1/L2 캐시가 있듯, LLM에는 <strong>KV-Cache(Key-Value Cache)</strong>가 있습니다. Transformer의 Attention 연산에서 이전에 계산한 Key와 Value를 저장해두어, 다음 토큰 생성 시 <strong>재계산을 생략</strong>합니다. 이를 통해 추론 속도가 크게 향상되지만, 대화가 길어질수록 캐시가 GPU 메모리를 많이 차지합니다.</p>
     <h4>Tokenomics: Token이 경제의 새로운 단위가 되다</h4>
     <p>NVIDIA CEO Jensen Huang은 GTC 2026에서 <strong>"AI Factory"</strong> 개념을 발표하며, 데이터센터를 전기와 데이터를 원료로 <strong>토큰(지능의 단위)</strong>을 생산하는 공장으로 재정의했습니다. 그가 제시한 공식은 다음과 같습니다:</p>
     <div class="callout callout-info" style="text-align:center;font-size:16px;font-weight:700"><p><strong>Revenue = Tokens per Watt &times; Available Gigawatts</strong></p></div>
     <p>이 공식은 에너지 효율(Tokens per Watt)이 곧 매출로 직결됨을 의미합니다. 1GW급 AI Factory 하나가 <strong>약 1,000억 달러</strong>의 건설 비용에 <strong>연간 1,500억 달러</strong>의 토큰 매출을 올릴 것으로 전망됩니다.</p>
     <p>Huang은 <em>"제1차 산업혁명은 전기를 생산했고, 제2차 산업혁명은 AI Factory를 통해 <strong>지능</strong>을 생산한다"</em>고 선언했습니다. 토큰은 이제 석유나 전기처럼 <strong>측정·거래 가능한 경제적 산출물</strong>이 되었으며, 이를 <strong>Tokenomics(토큰 경제학)</strong>라 부릅니다.</p>
+    <h4>KV-Cache: 토큰 생성의 핵심 메커니즘</h4>
+    <p>토큰을 효율적으로 생산하려면 <strong>KV-Cache(Key-Value Cache)</strong>에 대한 이해가 필수입니다. CPU에 L1/L2 캐시가 있듯이, LLM에는 KV-Cache가 있습니다.</p>
+    <p>Transformer의 Attention 연산에서 새로운 토큰을 생성할 때마다, 이전에 처리한 모든 토큰의 <strong>Key와 Value 벡터</strong>를 다시 계산해야 합니다. KV-Cache는 이미 계산된 K, V를 GPU 메모리에 저장해두어 <strong>재계산을 생략</strong>함으로써 추론 속도를 획기적으로 높입니다.</p>
+    <div class="callout callout-warning"><p class="callout-title">KV-Cache의 메모리 딜레마</p><p>70B 파라미터 모델이 8K 컨텍스트를 처리할 때, 요청 1건당 KV-Cache만 <strong>약 20GB</strong>를 차지합니다. 32건을 동시 처리하면 <strong>~640GB</strong>로, 모델 가중치보다 캐시가 더 많은 메모리를 소비합니다. 기존 방식에서는 GPU 메모리의 <strong>60~80%가 단편화(fragmentation)</strong>로 낭비되었습니다.</p></div>
+    <h4>PagedAttention: KV-Cache 메모리 문제의 해법</h4>
+    <p>이 문제를 해결한 것이 <strong>vLLM</strong>의 핵심 기술인 <a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>(Woosuk Kwon et al., 2023)입니다. 운영체제의 <strong>가상 메모리(Virtual Memory)</strong> 기법에서 영감을 받아, KV-Cache를 고정 크기 블록(기본 16토큰)으로 나누어 필요할 때만 동적 할당합니다.</p>
+    <ul>
+        <li><strong>메모리 낭비 60~80% → 4% 미만</strong>으로 절감</li>
+        <li>동일 GPU에서 <strong>처리량(throughput) 2~4배 향상</strong></li>
+        <li>공통 프롬프트 프리픽스의 KV-Cache를 <strong>여러 요청이 공유(Automatic Prefix Caching)</strong></li>
+        <li>GPU → CPU → 디스크로 이어지는 <strong>계층적 캐시 관리</strong></li>
+    </ul>
+    <p>후술할 Section 3의 <strong>vLLM 컴포넌트</strong>가 바로 이 PagedAttention 기반 추론 엔진을 Langflow에서 사용하는 방법입니다.</p>
 </div>
 <div data-lang="en">
     <h3>Token: Like Memory in Semiconductors, the Basic Unit of AI</h3>
@@ -414,13 +425,24 @@
         <li><strong>Speed:</strong> More tokens = more processing time</li>
         <li><strong>Context Window:</strong> Maximum tokens a model can process at once (e.g., 128K, 200K, 1M)</li>
     </ul>
-    <h4>What is KV-Cache?</h4>
-    <p>Just as CPUs have L1/L2 cache, LLMs have <strong>KV-Cache (Key-Value Cache)</strong>. It stores previously computed Keys and Values from the Transformer's Attention operation, <strong>skipping recomputation</strong> when generating the next token. This dramatically speeds up inference, but the cache consumes more GPU memory as conversations get longer.</p>
     <h4>Tokenomics: Tokens as a New Economic Unit</h4>
     <p>At GTC 2026, NVIDIA CEO Jensen Huang introduced the <strong>"AI Factory"</strong> concept — redefining data centers as factories that convert electricity and data into <strong>tokens (units of intelligence)</strong>. His formula:</p>
     <div class="callout callout-info" style="text-align:center;font-size:16px;font-weight:700"><p><strong>Revenue = Tokens per Watt &times; Available Gigawatts</strong></p></div>
     <p>Energy efficiency (Tokens per Watt) directly translates to revenue. A 1GW AI Factory costs ~<strong>$100B to build</strong> and is projected to generate <strong>$150B in annual token revenue</strong>.</p>
     <p>Huang declared: <em>"The first industrial revolution produced electricity; the second, with AI Factories, produces <strong>intelligence</strong>."</em> Tokens have become a <strong>measurable, tradeable economic output</strong> like oil or electricity — a concept known as <strong>Tokenomics</strong>.</p>
+    <h4>KV-Cache: The Core Mechanism of Token Generation</h4>
+    <p>Efficient token production requires understanding <strong>KV-Cache (Key-Value Cache)</strong>. Just as CPUs have L1/L2 cache, LLMs have KV-Cache.</p>
+    <p>Each time the Transformer generates a new token, it needs all previously computed <strong>Key and Value vectors</strong>. KV-Cache stores these in GPU memory, <strong>skipping recomputation</strong> and dramatically accelerating inference.</p>
+    <div class="callout callout-warning"><p class="callout-title">The KV-Cache Memory Dilemma</p><p>A 70B model processing 8K context consumes ~<strong>20GB of KV-Cache per request</strong>. At batch size 32, that's <strong>~640GB</strong> — often exceeding the model weights themselves. Traditional approaches waste <strong>60-80% of GPU memory</strong> through fragmentation.</p></div>
+    <h4>PagedAttention: Solving the KV-Cache Memory Problem</h4>
+    <p>The solution is <a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a> (Woosuk Kwon et al., 2023), the core technology behind <strong>vLLM</strong>. Inspired by OS <strong>virtual memory</strong>, it splits KV-Cache into fixed-size blocks (default 16 tokens) allocated on demand.</p>
+    <ul>
+        <li><strong>Memory waste reduced from 60-80% to under 4%</strong></li>
+        <li><strong>2-4x throughput improvement</strong> on the same GPU</li>
+        <li><strong>Automatic Prefix Caching</strong>: shared KV-Cache across requests with common prefixes</li>
+        <li><strong>Hierarchical cache</strong>: GPU → CPU → disk tiered management</li>
+    </ul>
+    <p>The <strong>vLLM components</strong> in Section 3 are how you use this PagedAttention-powered inference engine within Langflow.</p>
 </div>
 <div data-lang="zh">
     <h3>Token：如同半导体中的 Memory，AI 的基本单位</h3>
@@ -430,10 +452,12 @@
         <li><strong>速度：</strong>Token 越多，处理时间越长</li>
         <li><strong>上下文窗口：</strong>模型一次可处理的最大 Token 数（如 128K、200K、1M）</li>
     </ul>
-    <h4>什么是 KV-Cache？</h4>
-    <p>就像 CPU 有 L1/L2 缓存，LLM 有 <strong>KV-Cache</strong>。它存储 Transformer Attention 运算中之前计算的 Key 和 Value，生成下一个 Token 时<strong>跳过重新计算</strong>。显著加速推理，但对话越长，缓存占用的 GPU 内存越多。</p>
     <h4>Tokenomics：Token 成为新的经济单位</h4>
     <p>NVIDIA CEO Jensen Huang 在 GTC 2026 上提出 <strong>"AI Factory"</strong> 概念——将数据中心重新定义为以电力和数据为原料、生产<strong>Token（智能单位）</strong>的工厂。其公式：<strong>Revenue = Tokens per Watt × Available Gigawatts</strong>。1GW 级 AI Factory 建设成本约 <strong>1000 亿美元</strong>，预计年产 Token 收入 <strong>1500 亿美元</strong>。Token 已成为如石油、电力一般<strong>可衡量、可交易的经济产出</strong>。</p>
+    <h4>KV-Cache：Token 生成的核心机制</h4>
+    <p>高效生产 Token 需要理解 <strong>KV-Cache</strong>。Transformer 每生成一个新 Token，都需要之前所有 Token 的 <strong>Key 和 Value 向量</strong>。KV-Cache 将其存储在 GPU 内存中，<strong>跳过重新计算</strong>。但 70B 模型处理 8K 上下文时，每个请求的 KV-Cache 约 <strong>20GB</strong>，传统方式有 <strong>60-80% 内存浪费</strong>。</p>
+    <h4>PagedAttention：KV-Cache 内存问题的解决方案</h4>
+    <p><a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>（Woosuk Kwon 等，2023）借鉴操作系统<strong>虚拟内存</strong>技术，将 KV-Cache 分为固定大小的块按需分配，内存浪费从 60-80% 降至 <strong>4% 以下</strong>，吞吐量提升 <strong>2-4 倍</strong>。这正是 vLLM 的核心技术，也是后文 Section 3 中 vLLM 组件的基础。</p>
 </div>
 <div data-lang="ja">
     <h3>Token：半導体のMemoryのように、AIの基本単位</h3>
@@ -443,10 +467,12 @@
         <li><strong>速度：</strong>Tokenが多いほど処理時間が増加</li>
         <li><strong>Context Window：</strong>モデルが一度に処理できる最大Token数（例：128K、200K、1M）</li>
     </ul>
-    <h4>KV-Cacheとは？</h4>
-    <p>CPUにL1/L2キャッシュがあるように、LLMには<strong>KV-Cache</strong>があります。TransformerのAttention演算で以前計算したKeyとValueを保存し、次のToken生成時に<strong>再計算をスキップ</strong>します。推論速度が大幅に向上しますが、会話が長くなるほどGPUメモリを多く消費します。</p>
     <h4>Tokenomics：Tokenが経済の新たな単位に</h4>
     <p>NVIDIA CEO Jensen HuangはGTC 2026で<strong>「AI Factory」</strong>構想を発表し、データセンターを電力とデータから<strong>Token（知能の単位）</strong>を生産する工場として再定義しました。公式：<strong>Revenue = Tokens per Watt × Available Gigawatts</strong>。1GW級AI Factoryは建設費約<strong>1,000億ドル</strong>、年間Token売上<strong>1,500億ドル</strong>を見込みます。Tokenは石油や電気のような<strong>測定・取引可能な経済的産出物</strong>となりました。</p>
+    <h4>KV-Cache：Token生成の核心メカニズム</h4>
+    <p>効率的なToken生産には<strong>KV-Cache</strong>の理解が必須です。Transformerは新しいTokenを生成するたびに、それまでのすべてのTokenの<strong>KeyとValueベクトル</strong>が必要です。KV-Cacheはこれらをメモリに保存し<strong>再計算をスキップ</strong>します。しかし70Bモデルで8Kコンテキストを処理する場合、リクエスト1件あたり約<strong>20GB</strong>のKV-Cacheが必要で、従来方式ではGPUメモリの<strong>60〜80%が無駄</strong>になっていました。</p>
+    <h4>PagedAttention：KV-Cacheメモリ問題の解決策</h4>
+    <p><a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>（Woosuk Kwonら、2023）はOSの<strong>仮想メモリ</strong>技術に着想を得て、KV-Cacheを固定サイズブロックに分割しオンデマンド割当てします。メモリ浪費を60〜80%から<strong>4%未満</strong>に削減、スループット<strong>2〜4倍向上</strong>。これがvLLMの核心技術であり、後述のSection 3のvLLMコンポーネントの基盤です。</p>
 </div>
 
 <!-- Model Provider Roadmap -->

@@ -125,11 +125,16 @@
         h2 .heading-anchor:hover,h3 .heading-anchor:hover{color:var(--accent)}
         .toc-part{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);background:linear-gradient(90deg,var(--accent-light),transparent);padding:10px 18px 6px;margin-top:14px;border-left:3px solid var(--accent);border-radius:0 4px 4px 0;pointer-events:none;user-select:none}
         .toc-part:first-child{margin-top:0}
+        .scroll-top{position:fixed;bottom:28px;right:28px;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:var(--shadow-lg);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;z-index:90;display:flex;align-items:center;justify-content:center}
+        .scroll-top.visible{opacity:1;visibility:visible}
+        .scroll-top:hover{background:var(--accent-hover)}
+        @media print{.scroll-top{display:none}}
     </style>
 </head>
 <body>
 <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">&#9650;</button>
 <div class="top-bar">
     <button class="lang-btn active" onclick="setLang('ko')">KO</button>
     <button class="lang-btn" onclick="setLang('en')">EN</button>
@@ -2651,6 +2656,9 @@ document.addEventListener('DOMContentLoaded',function(){
         pre.insertBefore(btn,pre.firstChild);
     });
 });
+
+// Scroll-to-top button
+(function(){var btn=document.querySelector('.scroll-top');window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>400)})})();
 </script>
 </body>
 </html>

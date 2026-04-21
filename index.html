@@ -592,6 +592,88 @@
     <div class="card"><h4 data-lang="ko">Agent + Tool Mode</h4><h4 data-lang="en">Agent + Tool Mode</h4><h4 data-lang="zh">Agent + 工具模式</h4><h4 data-lang="ja">Agent + Tool Mode</h4><p data-lang="ko">내장 Agent 컴포넌트와 Tool Mode로 자율 에이전트를 쉽게 구성할 수 있습니다.</p><p data-lang="en">Built-in Agent component and Tool Mode make it easy to build autonomous agents.</p><p data-lang="zh">内置 Agent 组件和工具模式，轻松构建自主 Agent。</p><p data-lang="ja">内蔵の Agent コンポーネントと Tool Mode で自律エージェントを簡単に構成できます。</p></div>
     <div class="card"><h4 data-lang="ko">API 자동 제공</h4><h4 data-lang="en">Auto API Endpoint</h4><h4 data-lang="zh">自动提供 API</h4><h4 data-lang="ja">API 自動提供</h4><p data-lang="ko">만든 Flow를 OpenAI 호환 <code>/responses</code> API로 자동 노출. 다른 시스템에서 바로 호출 가능합니다.</p><p data-lang="en">Automatically exposes Flows as OpenAI-compatible <code>/responses</code> API for external systems.</p><p data-lang="zh">自动将 Flow 暴露为 OpenAI 兼容 <code>/responses</code> API，可从外部系统直接调用。</p><p data-lang="ja">作成した Flow を OpenAI 互換 <code>/responses</code> API として自動公開。他システムからすぐに呼び出せます。</p></div>
 </div>
+
+<div data-lang="ko">
+    <h3>다른 플랫폼과의 비교</h3>
+    <p>AI 워크플로 빌더는 Langflow 외에도 여러 가지가 있습니다. 각 플랫폼의 특성을 비교하면 Langflow를 선택해야 하는 이유가 명확해집니다.</p>
+</div>
+<div data-lang="en">
+    <h3>Comparison with Other Platforms</h3>
+    <p>Several AI workflow builders exist beyond Langflow. Comparing their characteristics makes the case for Langflow clear.</p>
+</div>
+<div data-lang="zh"><h3>与其他平台的比较</h3><p>除 Langflow 外还有多种 AI 工作流构建工具。比较各平台特点可以明确选择 Langflow 的理由。</p></div>
+<div data-lang="ja"><h3>他プラットフォームとの比較</h3><p>Langflow 以外にも AI ワークフロービルダーは複数あります。各プラットフォームの特性を比較すると、Langflow を選ぶ理由が明確になります。</p></div>
+<div class="table-wrapper"><table>
+    <thead><tr>
+        <th data-lang="ko">비교 항목</th><th data-lang="en">Feature</th><th data-lang="zh">比较项</th><th data-lang="ja">比較項目</th>
+        <th>Langflow</th><th>Dify</th><th>Flowise</th><th>n8n</th>
+    </tr></thead>
+    <tbody>
+        <tr>
+            <td data-lang="ko"><strong>핵심 강점</strong></td><td data-lang="en"><strong>Core Strength</strong></td><td data-lang="zh"><strong>核心优势</strong></td><td data-lang="ja"><strong>核心強み</strong></td>
+            <td data-lang="ko">복잡한 AI Agent Flow</td><td data-lang="en">Complex AI Agent Flows</td><td data-lang="zh">复杂 AI Agent Flow</td><td data-lang="ja">複雑な AI Agent Flow</td>
+            <td data-lang="ko">올인원 LLM 플랫폼</td><td data-lang="en">All-in-one LLM platform</td><td data-lang="zh">一站式 LLM 平台</td><td data-lang="ja">オールインワンLLM</td>
+            <td data-lang="ko">빠른 RAG 챗봇</td><td data-lang="en">Quick RAG chatbot</td><td data-lang="zh">快速 RAG 聊天机器人</td><td data-lang="ja">高速RAGチャットボット</td>
+            <td data-lang="ko">범용 자동화 + AI</td><td data-lang="en">General automation + AI</td><td data-lang="zh">通用自动化 + AI</td><td data-lang="ja">汎用自動化+AI</td>
+        </tr>
+        <tr>
+            <td data-lang="ko"><strong>코드 커스터마이징</strong></td><td data-lang="en"><strong>Code Customization</strong></td><td data-lang="zh"><strong>代码自定义</strong></td><td data-lang="ja"><strong>コードカスタマイズ</strong></td>
+            <td data-lang="ko">Python 자유 작성</td><td data-lang="en">Free Python authoring</td><td data-lang="zh">自由 Python 编写</td><td data-lang="ja">Python自由記述</td>
+            <td data-lang="ko">샌드박스 제한</td><td data-lang="en">Sandbox limited</td><td data-lang="zh">沙盒限制</td><td data-lang="ja">サンドボックス制限</td>
+            <td data-lang="ko">제한적</td><td data-lang="en">Limited</td><td data-lang="zh">有限</td><td data-lang="ja">制限的</td>
+            <td data-lang="ko">노드 기반</td><td data-lang="en">Node-based</td><td data-lang="zh">节点式</td><td data-lang="ja">ノードベース</td>
+        </tr>
+        <tr>
+            <td data-lang="ko"><strong>LangChain/LangGraph</strong></td><td data-lang="en"><strong>LangChain/LangGraph</strong></td><td data-lang="zh"><strong>LangChain/LangGraph</strong></td><td data-lang="ja"><strong>LangChain/LangGraph</strong></td>
+            <td><strong>Native</strong></td><td>Partial</td><td>Partial</td><td>Via integration</td>
+        </tr>
+        <tr>
+            <td data-lang="ko"><strong>폐쇄망(Air-gapped) 배포</strong></td><td data-lang="en"><strong>Air-gapped Deploy</strong></td><td data-lang="zh"><strong>离线部署</strong></td><td data-lang="ja"><strong>閉域網デプロイ</strong></td>
+            <td>&#10004;</td><td>&#10004;</td><td>&#10004;</td><td>&#10004;</td>
+        </tr>
+        <tr>
+            <td data-lang="ko"><strong>라이선스</strong></td><td data-lang="en"><strong>License</strong></td><td data-lang="zh"><strong>许可证</strong></td><td data-lang="ja"><strong>ライセンス</strong></td>
+            <td>Apache 2.0</td><td>Apache 2.0</td><td>Apache 2.0</td><td>Sustainable Use</td>
+        </tr>
+    </tbody>
+</table></div>
+
+<div data-lang="ko">
+    <h3>Langflow의 차별점</h3>
+    <h4>LangChain & LangGraph 네이티브 호환</h4>
+    <p>Langflow는 <strong>LangChain 위에 구축</strong>된 플랫폼입니다. LangChain의 컴포넌트(Retriever, Chain, Memory 등)를 네이티브로 사용할 수 있고, <strong>LangGraph</strong>의 멀티 에이전트 오케스트레이션도 Flow 안에서 구현할 수 있습니다. 다른 플랫폼들은 LangChain을 부분적으로만 지원하지만, Langflow는 LangChain 생태계의 <strong>비주얼 IDE</strong> 역할을 합니다.</p>
+    <h4>Python 코드 완전 제어</h4>
+    <p>Dify나 Flowise는 코드를 샌드박스 내에서만 실행하지만, Langflow의 Custom Component는 <strong>제한 없는 Python 환경</strong>에서 동작합니다. <code>subprocess</code>로 패키지를 설치하고, 사내 라이브러리를 import하며, 컴포넌트를 한번 작성해 여러 Flow에서 재사용할 수 있습니다.</p>
+    <h4>폐쇄망(Air-gapped) 보안</h4>
+    <p>Langflow를 자체 호스팅하면 <strong>프롬프트, 문서, 벡터 임베딩 등 모든 데이터가 사내 인프라를 벗어나지 않습니다</strong>. vLLM으로 호스팅한 로컬 모델만 사용하면 외부 API 호출이 전혀 발생하지 않아, GDPR이나 사내 보안 규정을 완벽히 준수할 수 있습니다. 이는 Make.com 같은 클라우드 전용 도구로는 불가능한 구성입니다.</p>
+</div>
+<div data-lang="en">
+    <h3>What Sets Langflow Apart</h3>
+    <h4>Native LangChain & LangGraph Compatibility</h4>
+    <p>Langflow is <strong>built on top of LangChain</strong>. It natively supports LangChain components (Retriever, Chain, Memory, etc.) and can implement <strong>LangGraph</strong> multi-agent orchestration within Flows. Other platforms only partially support LangChain; Langflow serves as the LangChain ecosystem's <strong>visual IDE</strong>.</p>
+    <h4>Full Python Code Control</h4>
+    <p>Dify and Flowise restrict code to sandboxed environments. Langflow's Custom Components run in an <strong>unrestricted Python environment</strong> — install packages via <code>subprocess</code>, import internal libraries, write once and reuse across multiple Flows.</p>
+    <h4>Air-gapped Security</h4>
+    <p>Self-hosted Langflow ensures <strong>all data — prompts, documents, vector embeddings — never leaves your infrastructure</strong>. Using only locally-hosted models via vLLM, zero external API calls are made, fully complying with GDPR and internal security policies. This is impossible with cloud-only tools like Make.com.</p>
+</div>
+<div data-lang="zh">
+    <h3>Langflow 的差异化优势</h3>
+    <h4>原生兼容 LangChain & LangGraph</h4>
+    <p>Langflow <strong>基于 LangChain 构建</strong>，原生支持 LangChain 组件，可在 Flow 中实现 <strong>LangGraph</strong> 多 Agent 编排。其他平台仅部分支持 LangChain，而 Langflow 是 LangChain 生态的<strong>可视化 IDE</strong>。</p>
+    <h4>Python 代码完全控制</h4>
+    <p>Dify 和 Flowise 将代码限制在沙盒中。Langflow 的 Custom Component 在<strong>无限制的 Python 环境</strong>中运行——可安装包、导入内部库、一次编写多处复用。</p>
+    <h4>离线（Air-gapped）安全</h4>
+    <p>自托管 Langflow 确保<strong>所有数据（Prompt、文档、向量嵌入）不离开内部基础设施</strong>。仅使用 vLLM 本地模型时零外部 API 调用，完全符合 GDPR 及内部安全策略。</p>
+</div>
+<div data-lang="ja">
+    <h3>Langflow の差別化ポイント</h3>
+    <h4>LangChain & LangGraph ネイティブ互換</h4>
+    <p>Langflow は <strong>LangChain 上に構築</strong>されたプラットフォームです。LangChain コンポーネントをネイティブに使用でき、<strong>LangGraph</strong> のマルチエージェントオーケストレーションも Flow 内で実装できます。他のプラットフォームは LangChain を部分的にしかサポートしませんが、Langflow は LangChain エコシステムの<strong>ビジュアル IDE</strong>です。</p>
+    <h4>Python コード完全制御</h4>
+    <p>Dify や Flowise はコードをサンドボックスに制限しますが、Langflow の Custom Component は<strong>制限のない Python 環境</strong>で動作します。パッケージインストール、社内ライブラリ import、一度書いて複数 Flow で再利用が可能です。</p>
+    <h4>エアギャップ（閉域網）セキュリティ</h4>
+    <p>セルフホストの Langflow は<strong>すべてのデータ（プロンプト、ドキュメント、ベクトル埋め込み）が社内インフラから出ません</strong>。vLLM ローカルモデルのみ使用すれば外部 API 呼び出しはゼロで、GDPR や社内セキュリティポリシーに完全準拠できます。</p>
+</div>
 </section>
 
 <!-- ==================== Section 3 ==================== -->

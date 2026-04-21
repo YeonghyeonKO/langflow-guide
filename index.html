@@ -407,15 +407,24 @@
     <p>토큰을 효율적으로 생산하려면 <strong>KV-Cache(Key-Value Cache)</strong>에 대한 이해가 필수입니다. CPU에 L1/L2 캐시가 있듯이, LLM에는 KV-Cache가 있습니다.</p>
     <p>Transformer의 Attention 연산에서 새로운 토큰을 생성할 때마다, 이전에 처리한 모든 토큰의 <strong>Key와 Value 벡터</strong>를 다시 계산해야 합니다. KV-Cache는 이미 계산된 K, V를 GPU 메모리에 저장해두어 <strong>재계산을 생략</strong>함으로써 추론 속도를 획기적으로 높입니다.</p>
     <div class="callout callout-info"><p class="callout-title">GPU VRAM 할당 구조</p><p>GPU에 모델을 올리면 VRAM은 크게 두 영역으로 나뉩니다: <strong>모델 가중치(Weights)</strong>가 고정 영역을 차지하고, <strong>나머지 VRAM이 KV-Cache</strong>로 사용됩니다. 즉, 남는 VRAM이 클수록 더 많은 요청을 동시에 처리할 수 있습니다. 예를 들어 70B 모델이 8K 컨텍스트를 처리할 때 요청 1건당 KV-Cache가 <strong>약 20GB</strong>를 차지하므로, 남은 VRAM의 크기가 곧 동시 처리 성능을 결정합니다.</p></div>
-    <p>문제는 기존 방식에서 이 남은 VRAM을 <strong>비효율적으로 관리</strong>했다는 점입니다. 요청마다 최대 컨텍스트 길이를 미리 예약하다 보니, GPU 메모리의 <strong>60~80%가 단편화(fragmentation)로 낭비</strong>되었습니다. 이를 해결한 것이 바로 <strong>PagedAttention</strong>입니다.</p>
-    <h4>PagedAttention: KV-Cache 메모리 문제의 해법</h4>
-    <p><strong>vLLM</strong>의 핵심 기술인 <a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>(Woosuk Kwon et al., 2023)은 운영체제의 <strong>가상 메모리(Virtual Memory)</strong> 기법에서 영감을 받아, KV-Cache를 고정 크기 블록(기본 16토큰)으로 나누어 필요할 때만 동적 할당합니다.</p>
+    <h4>왜 단편화가 발생했나? (PagedAttention 이전)</h4>
+    <p>기존 방식에서는 KV-Cache를 <strong>연속 메모리(contiguous allocation)</strong>로 할당했습니다. 요청이 들어올 때 출력 길이를 미리 알 수 없으므로, <strong>최대 가능한 컨텍스트 길이</strong>(예: 2048토큰)만큼 VRAM을 미리 예약합니다. 실제로는 100토큰만 생성하고 끝나더라도 나머지 1948토큰분 메모리는 잠긴 채 낭비됩니다.</p>
+    <p>요청마다 다른 시점에 종료되면서 중간중간 빈 구멍이 생기지만, 이 구멍들은 연속 공간이 아니라 새 요청에 할당할 수 없습니다. 이것이 OS의 <strong>외부 단편화(External Fragmentation)</strong>와 동일한 문제이며, GPU 메모리의 <strong>60~80%가 이렇게 낭비</strong>되었습니다.</p>
+    <h4>PagedAttention: OS 가상 메모리에서 영감을 얻은 해법</h4>
+    <p>OS가 외부 단편화를 <strong>페이징(Paging)</strong>으로 해결했듯, <strong>vLLM</strong>의 <a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>(Woosuk Kwon et al., 2023)은 KV-Cache를 <strong>고정 크기 블록(기본 16토큰)</strong>으로 나누어, 토큰이 생성될 때마다 필요한 만큼만 동적 할당합니다. 블록들이 물리적으로 연속일 필요가 없으므로 단편화가 사라집니다.</p>
     <ul>
         <li><strong>메모리 낭비 60~80% → 4% 미만</strong>으로 절감</li>
         <li>동일 GPU에서 <strong>처리량(throughput) 2~4배 향상</strong></li>
         <li>공통 프롬프트 프리픽스의 KV-Cache를 <strong>여러 요청이 공유(Automatic Prefix Caching)</strong></li>
-        <li>GPU → CPU → 디스크로 이어지는 <strong>계층적 캐시 관리</strong></li>
     </ul>
+    <h4>VRAM이 부족하면? — OS Page Fault와 같은 원리</h4>
+    <p>사용자가 너무 많아 KV-Cache용 VRAM이 가득 차면, OS에서 Page Fault가 발생하는 것과 동일한 상황이 벌어집니다. vLLM은 이를 <strong>계층적 캐시(Hierarchical Cache)</strong>로 처리합니다:</p>
+    <ol>
+        <li><strong>GPU VRAM 가득 참</strong> → 우선순위 낮은 요청의 KV-Cache를 <strong>CPU 메모리로 스왑(eviction)</strong></li>
+        <li><strong>CPU도 부족</strong> → <strong>디스크로 스왑</strong></li>
+        <li><strong>그래도 부족</strong> → 요청을 <strong>큐에 대기(waiting)</strong>시키거나 <strong>선점(preemption)</strong></li>
+    </ol>
+    <p>OS에서 Page Fault가 너무 잦으면 <strong>스래싱(Thrashing)</strong>이 발생하듯, KV-Cache 스왑이 빈번하면 추론 성능이 급격히 저하됩니다. 이것이 프로덕션 환경에서 <strong>GPU 수와 VRAM 크기</strong>가 중요한 근본적인 이유입니다.</p>
     <p>후술할 Section 3의 <strong>vLLM 컴포넌트</strong>가 바로 이 PagedAttention 기반 추론 엔진을 Langflow에서 사용하는 방법입니다.</p>
 </div>
 <div data-lang="en">
@@ -435,15 +444,24 @@
     <p>Efficient token production requires understanding <strong>KV-Cache (Key-Value Cache)</strong>. Just as CPUs have L1/L2 cache, LLMs have KV-Cache.</p>
     <p>Each time the Transformer generates a new token, it needs all previously computed <strong>Key and Value vectors</strong>. KV-Cache stores these in GPU memory, <strong>skipping recomputation</strong> and dramatically accelerating inference.</p>
     <div class="callout callout-info"><p class="callout-title">GPU VRAM Allocation</p><p>When a model is loaded onto a GPU, VRAM splits into two regions: <strong>model weights</strong> occupy a fixed portion, and the <strong>remaining VRAM is used for KV-Cache</strong>. More leftover VRAM = more concurrent requests. A 70B model with 8K context uses ~<strong>20GB of KV-Cache per request</strong>, so available VRAM directly determines concurrent throughput.</p></div>
-    <p>The problem was that traditional approaches <strong>managed this VRAM inefficiently</strong> — pre-reserving maximum context length per request wasted <strong>60-80% of GPU memory</strong> through fragmentation. <strong>PagedAttention</strong> solves this.</p>
-    <h4>PagedAttention: Solving the KV-Cache Memory Problem</h4>
-    <p><a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a> (Woosuk Kwon et al., 2023), the core technology behind <strong>vLLM</strong>, is inspired by OS <strong>virtual memory</strong>. It splits KV-Cache into fixed-size blocks (default 16 tokens) allocated on demand.</p>
+    <h4>Why Did Fragmentation Occur? (Before PagedAttention)</h4>
+    <p>Traditional systems allocated KV-Cache as <strong>contiguous memory</strong>. Since output length is unknown at request time, the system <strong>pre-reserves the maximum context length</strong> (e.g., 2048 tokens). If only 100 tokens are actually generated, the remaining 1948 tokens' worth of memory stays locked and wasted.</p>
+    <p>As requests finish at different times, gaps appear — but these gaps aren't contiguous, so new requests can't use them. This is exactly <strong>external fragmentation</strong>, just like in OS memory management, wasting <strong>60-80% of GPU memory</strong>.</p>
+    <h4>PagedAttention: Inspired by OS Virtual Memory</h4>
+    <p>Just as OS solved external fragmentation with <strong>paging</strong>, <strong>vLLM</strong>'s <a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a> (Woosuk Kwon et al., 2023) splits KV-Cache into <strong>fixed-size blocks (default 16 tokens)</strong>, dynamically allocated as tokens are generated. Blocks don't need to be physically contiguous, eliminating fragmentation.</p>
     <ul>
         <li><strong>Memory waste reduced from 60-80% to under 4%</strong></li>
         <li><strong>2-4x throughput improvement</strong> on the same GPU</li>
         <li><strong>Automatic Prefix Caching</strong>: shared KV-Cache across requests with common prefixes</li>
-        <li><strong>Hierarchical cache</strong>: GPU → CPU → disk tiered management</li>
     </ul>
+    <h4>What if VRAM Runs Out? — Same Principle as OS Page Faults</h4>
+    <p>When too many concurrent users exhaust KV-Cache VRAM, it's analogous to OS page faults. vLLM handles this with <strong>hierarchical caching</strong>:</p>
+    <ol>
+        <li><strong>GPU VRAM full</strong> → evict lower-priority requests' KV-Cache to <strong>CPU memory</strong></li>
+        <li><strong>CPU full</strong> → swap to <strong>disk</strong></li>
+        <li><strong>Still full</strong> → <strong>queue requests</strong> or preempt</li>
+    </ol>
+    <p>Just as excessive page faults cause <strong>thrashing</strong> in an OS, frequent KV-Cache swaps degrade inference performance sharply. This is the fundamental reason <strong>GPU count and VRAM size</strong> matter in production deployments.</p>
     <p>The <strong>vLLM components</strong> in Section 3 are how you use this PagedAttention-powered inference engine within Langflow.</p>
 </div>
 <div data-lang="zh">
@@ -458,9 +476,13 @@
     <p>NVIDIA CEO Jensen Huang 在 GTC 2026 上提出 <strong>"AI Factory"</strong> 概念——将数据中心重新定义为以电力和数据为原料、生产<strong>Token（智能单位）</strong>的工厂。其公式：<strong>Revenue = Tokens per Watt × Available Gigawatts</strong>。1GW 级 AI Factory 建设成本约 <strong>1000 亿美元</strong>，预计年产 Token 收入 <strong>1500 亿美元</strong>。Token 已成为如石油、电力一般<strong>可衡量、可交易的经济产出</strong>。</p>
     <h4>KV-Cache：Token 生成的核心机制</h4>
     <p>高效生产 Token 需要理解 <strong>KV-Cache</strong>。Transformer 每生成一个新 Token，都需要之前所有 Token 的 <strong>Key 和 Value 向量</strong>。KV-Cache 将其存储在 GPU 内存中，<strong>跳过重新计算</strong>。GPU 加载模型后，<strong>剩余 VRAM 即用于 KV-Cache</strong>——剩余越多，可并发处理的请求越多。70B 模型处理 8K 上下文时，每请求约 <strong>20GB</strong>。</p>
-    <p>问题在于传统方式<strong>低效管理</strong>这部分 VRAM——每个请求预留最大上下文长度，导致 <strong>60-80% 内存因碎片化浪费</strong>。<strong>PagedAttention</strong> 解决了这一问题。</p>
-    <h4>PagedAttention：KV-Cache 内存问题的解决方案</h4>
-    <p><a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>（Woosuk Kwon 等，2023）借鉴操作系统<strong>虚拟内存</strong>技术，将 KV-Cache 分为固定大小的块按需分配，内存浪费从 60-80% 降至 <strong>4% 以下</strong>，吞吐量提升 <strong>2-4 倍</strong>。这正是 vLLM 的核心技术，也是后文 Section 3 中 vLLM 组件的基础。</p>
+    <h4>为什么会产生碎片化？（PagedAttention 之前）</h4>
+    <p>传统方式将 KV-Cache 分配为<strong>连续内存</strong>。由于无法预知输出长度，系统会<strong>预留最大上下文长度</strong>（如 2048 Token）。实际只生成 100 Token，其余内存仍被锁定浪费。请求在不同时间结束，产生不连续的空隙——这正是 OS 的<strong>外部碎片化</strong>，浪费了 <strong>60-80% GPU 内存</strong>。</p>
+    <h4>PagedAttention：受 OS 虚拟内存启发的解决方案</h4>
+    <p>如同 OS 用<strong>分页（Paging）</strong>解决碎片化，<a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>（Woosuk Kwon 等，2023）将 KV-Cache 拆分为<strong>固定大小块（默认 16 Token）</strong>，按需动态分配，块无需物理连续。内存浪费从 60-80% 降至 <strong>4% 以下</strong>，吞吐量提升 <strong>2-4 倍</strong>。</p>
+    <h4>VRAM 不足时？——与 OS Page Fault 相同的原理</h4>
+    <p>并发用户过多耗尽 VRAM 时，vLLM 通过<strong>分层缓存</strong>处理：GPU VRAM 满 → 换出到 <strong>CPU 内存</strong> → 换出到<strong>磁盘</strong> → <strong>排队等待</strong>。如同 OS 中频繁 Page Fault 导致<strong>抖动（Thrashing）</strong>，KV-Cache 频繁换出会使推理性能急剧下降。这就是生产环境中 <strong>GPU 数量和 VRAM 大小</strong>至关重要的根本原因。</p>
+    <p>后文 Section 3 的 <strong>vLLM 组件</strong>正是在 Langflow 中使用这一 PagedAttention 推理引擎的方式。</p>
 </div>
 <div data-lang="ja">
     <h3>Token：半導体のMemoryのように、AIの基本単位</h3>
@@ -474,9 +496,13 @@
     <p>NVIDIA CEO Jensen HuangはGTC 2026で<strong>「AI Factory」</strong>構想を発表し、データセンターを電力とデータから<strong>Token（知能の単位）</strong>を生産する工場として再定義しました。公式：<strong>Revenue = Tokens per Watt × Available Gigawatts</strong>。1GW級AI Factoryは建設費約<strong>1,000億ドル</strong>、年間Token売上<strong>1,500億ドル</strong>を見込みます。Tokenは石油や電気のような<strong>測定・取引可能な経済的産出物</strong>となりました。</p>
     <h4>KV-Cache：Token生成の核心メカニズム</h4>
     <p>効率的なToken生産には<strong>KV-Cache</strong>の理解が必須です。Transformerは新しいTokenを生成するたびに、それまでのすべてのTokenの<strong>KeyとValueベクトル</strong>が必要です。KV-Cacheはこれらをメモリに保存し<strong>再計算をスキップ</strong>します。GPUにモデルを読み込むと、<strong>残りのVRAMがKV-Cache</strong>に使われ、残りが多いほど同時処理できるリクエストが増えます。70Bモデルで8Kコンテキストの場合、リクエスト1件あたり約<strong>20GB</strong>が必要です。</p>
-    <p>問題は従来方式が残りVRAMを<strong>非効率に管理</strong>していたことです。リクエストごとに最大コンテキスト長を事前予約するため、GPUメモリの<strong>60〜80%がフラグメンテーションで無駄</strong>になっていました。<strong>PagedAttention</strong>がこれを解決します。</p>
-    <h4>PagedAttention：KV-Cacheメモリ問題の解決策</h4>
-    <p><a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>（Woosuk Kwonら、2023）はOSの<strong>仮想メモリ</strong>技術に着想を得て、KV-Cacheを固定サイズブロックに分割しオンデマンド割当てします。メモリ浪費を60〜80%から<strong>4%未満</strong>に削減、スループット<strong>2〜4倍向上</strong>。これがvLLMの核心技術であり、後述のSection 3のvLLMコンポーネントの基盤です。</p>
+    <h4>なぜフラグメンテーションが発生したのか？（PagedAttention以前）</h4>
+    <p>従来方式ではKV-Cacheを<strong>連続メモリ</strong>で割り当てていました。出力長が事前に分からないため、<strong>最大コンテキスト長</strong>（例：2048トークン）分のVRAMを予約します。実際に100トークンしか生成しなくても残りは無駄になります。リクエストが異なるタイミングで終了し、不連続な隙間が生まれますが、<strong>連続空間ではない</strong>ため新しいリクエストに使えません。これはOSの<strong>外部フラグメンテーション</strong>と同じ問題で、GPUメモリの<strong>60〜80%が浪費</strong>されていました。</p>
+    <h4>PagedAttention：OS仮想メモリに着想を得た解決策</h4>
+    <p>OSが<strong>ページング</strong>で外部フラグメンテーションを解決したように、<a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener"><strong>PagedAttention</strong></a>（Woosuk Kwonら、2023）はKV-Cacheを<strong>固定サイズブロック（デフォルト16トークン）</strong>に分割し、トークン生成時に必要な分だけ動的割当てします。ブロックが物理的に連続である必要がないため、フラグメンテーションが解消されます。メモリ浪費60〜80%→<strong>4%未満</strong>、スループット<strong>2〜4倍向上</strong>。</p>
+    <h4>VRAMが不足したら？——OS Page Faultと同じ原理</h4>
+    <p>同時ユーザーが多すぎてKV-Cache用VRAMが枯渇すると、OSのPage Faultと同様の状況が発生します。vLLMは<strong>階層キャッシュ</strong>で対処します：GPU VRAM満杯→<strong>CPUメモリ</strong>へスワップ→<strong>ディスク</strong>へスワップ→<strong>キュー待ち</strong>。OSで頻繁なPage Faultが<strong>スラッシング</strong>を引き起こすように、KV-Cacheの頻繁なスワップは推論性能を急激に低下させます。これが本番環境で<strong>GPU数とVRAMサイズ</strong>が重要な根本的理由です。</p>
+    <p>後述のSection 3の<strong>vLLMコンポーネント</strong>が、このPagedAttentionベースの推論エンジンをLangflowで使用する方法です。</p>
 </div>
 
 <!-- Model Provider Roadmap -->

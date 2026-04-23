@@ -1613,15 +1613,31 @@ for dist in distributions():
 <img src="assets/images/globalvar-add2.png" alt="Add Global Variable (Credential)" class="step-img" style="max-width:550px;display:inline-block;vertical-align:top">
 <div data-lang="ko">
     <div class="callout callout-warning"><p class="callout-title">관리자 참고: Credential 타입</p><p>아래는 <strong>Langflow 관리자(플랫폼 엔지니어)</strong> 관점의 내용입니다. Global Variable의 Type을 <strong>Credential</strong>로 설정하면 값이 암호화되어 저장됩니다. 이때 서버의 <code>LANGFLOW_SECRET_KEY</code> 환경변수가 <strong>Fernet 포맷</strong>을 준수해야 합니다. Fernet 키가 설정되지 않거나 형식이 잘못되면 Credential 값의 암복호화에 실패합니다. 일반 사용자는 관리자에게 문의하세요.</p></div>
+    <div class="callout callout-tip"><p class="callout-title">플랫폼 엔지니어 Tip: API Key & Workers 설정</p>
+    <p><strong>LANGFLOW_API_KEY</strong>를 OS 환경변수로 관리하려면 <code>LANGFLOW_API_KEY_SOURCE=env</code>로 설정합니다. 이렇게 하면 API Key를 코드나 설정 파일이 아닌 시스템 환경변수에서 읽어옵니다.</p>
+    <p><strong>LANGFLOW_WORKERS</strong>의 기본값은 <code>1</code>입니다. Knowledge Base Ingestion 등 무거운 작업이 수행되는 동안 Worker가 하나뿐이면 health check 응답이 지연되어 <strong>503 Error</strong>가 발생할 수 있습니다. 쾌적한 운영을 위해 <strong>2코어 이상 환경에서 <code>LANGFLOW_WORKERS=3</code> 이상</strong>으로 설정하는 것을 권장합니다.</p>
+    </div>
 </div>
 <div data-lang="en">
     <div class="callout callout-warning"><p class="callout-title">Admin Note: Credential Type</p><p>This is for <strong>Langflow administrators (platform engineers)</strong>. Setting Type to <strong>Credential</strong> encrypts the value. The server's <code>LANGFLOW_SECRET_KEY</code> env var must follow the <strong>Fernet format</strong>. If missing or malformed, encryption/decryption will fail. Regular users should contact the admin.</p></div>
+    <div class="callout callout-tip"><p class="callout-title">Platform Engineer Tip: API Key & Workers</p>
+    <p>To manage <strong>LANGFLOW_API_KEY</strong> via OS environment variables, set <code>LANGFLOW_API_KEY_SOURCE=env</code>.</p>
+    <p><strong>LANGFLOW_WORKERS</strong> defaults to <code>1</code>. During heavy tasks like Knowledge Base Ingestion, a single worker can't respond to health checks in time, causing <strong>503 errors</strong>. For smooth operation, set <strong><code>LANGFLOW_WORKERS=3</code> or higher on 2+ core machines</strong>.</p>
+    </div>
 </div>
 <div data-lang="zh">
     <div class="callout callout-warning"><p class="callout-title">管理员注意：Credential 类型</p><p>以下为 <strong>Langflow 管理员（基础设施团队）</strong>参考内容。Type 设为 <strong>Credential</strong> 会加密存储值。服务器的 <code>LANGFLOW_SECRET_KEY</code> 环境变量必须遵循 <strong>Fernet 格式</strong>。缺失或格式错误将导致加解密失败。普通用户请联系管理员。</p></div>
+    <div class="callout callout-tip"><p class="callout-title">平台工程师 Tip：API Key 和 Workers 设置</p>
+    <p>通过 OS 环境变量管理 <strong>LANGFLOW_API_KEY</strong>，设置 <code>LANGFLOW_API_KEY_SOURCE=env</code>。</p>
+    <p><strong>LANGFLOW_WORKERS</strong> 默认值为 <code>1</code>。Knowledge Base Ingestion 等重任务期间，单个 Worker 无法及时响应健康检查，导致 <strong>503 错误</strong>。建议在 2 核以上环境设置 <strong><code>LANGFLOW_WORKERS=3</code> 以上</strong>。</p>
+    </div>
 </div>
 <div data-lang="ja">
     <div class="callout callout-warning"><p class="callout-title">管理者向け：Credential タイプ</p><p>以下は <strong>Langflow 管理者（インフラ担当）</strong>向けの内容です。Type を <strong>Credential</strong> に設定すると値が暗号化されます。サーバーの <code>LANGFLOW_SECRET_KEY</code> 環境変数が <strong>Fernet フォーマット</strong>に準拠している必要があります。キーが未設定または形式が不正な場合、暗復号化に失敗します。一般ユーザーは管理者にお問い合わせください。</p></div>
+    <div class="callout callout-tip"><p class="callout-title">プラットフォームエンジニア Tip：API Key & Workers 設定</p>
+    <p><strong>LANGFLOW_API_KEY</strong> を OS 環境変数で管理するには <code>LANGFLOW_API_KEY_SOURCE=env</code> を設定します。</p>
+    <p><strong>LANGFLOW_WORKERS</strong> のデフォルトは <code>1</code> です。Knowledge Base Ingestion などの重い処理中、Worker が1つだとヘルスチェックに応答できず <strong>503 エラー</strong>が発生します。快適な運用には <strong>2コア以上で <code>LANGFLOW_WORKERS=3</code> 以上</strong>を推奨します。</p>
+    </div>
 </div>
 <div class="quiz">
     <p class="quiz-title" data-lang="ko">퀴즈</p><p class="quiz-title" data-lang="en">Quiz</p><p class="quiz-title" data-lang="zh">测验</p><p class="quiz-title" data-lang="ja">クイズ</p>
